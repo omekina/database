@@ -16,7 +16,7 @@ This is still just a development version and should not be used in production!
 > > IsKey (1-bit boolean)<br />
 > > IsAutoIncrement (1-bit boolean)<br />
 > > Datatype (6-bit unsigned integer)<br />
-> > Name length (8-bit)
+> > Name length (8-bit unsigned integer)
 >
 > > ...
 > ## LUT (variable length)
