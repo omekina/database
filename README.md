@@ -27,6 +27,6 @@ This is still just a development version and should not be used in production
 > > Value length/Pointer (?-bit unsigned integer)
 >
 > Padding (?x 1-bit null)
-> ## Data (variable length)
+> ## DATA (variable length)
 > Row names<br />
 > Values
