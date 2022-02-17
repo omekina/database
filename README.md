@@ -1,7 +1,7 @@
 # Plory's database
 
 Trying to create something like SQL just for fun. :) I'm trying to optimize everything from the start, so new updates might not come right away.<br />
-This is still just a development version and should not be used in production
+This is still just a development version and should not be used in production!
 
 
 ## Table file structure
@@ -28,5 +28,5 @@ This is still just a development version and should not be used in production
 >
 > Padding (?x 1-bit null)
 > ## DATA (variable length)
-> Row names<br />
-> Values
+> Row names (?x ?-bit string)<br />
+> Values (?)
