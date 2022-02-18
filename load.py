@@ -1,5 +1,6 @@
 import program_data
 from modules import pdb_bitlogic
+from modules import pdb_datatypes
 
 
 class session: # Database session
@@ -63,7 +64,7 @@ class session: # Database session
         except Exception as exc: raise Exception("load->layout: " + str(exc))
         except: raise Exception("load->layout: error when parsing")
 
-# ----- prePARSED LAYOUT -----
+# ----- PARSED LAYOUT -----
 # isKey (bool)
 # isAutoIncrement (bool)
 # dataType (int)
@@ -87,9 +88,51 @@ class session: # Database session
                     lut = lut[1:]
                     pointerLength, lut = int(lut[:7], base=2), lut[7:]
                     pointer, lut = int(lut[:pointerLength], base=2), lut[pointerLength:]
+                    self.verifyBodyLength += pointer
                     self.rows.append([True, pointer])
                 else:
                     lut = lut[1:]
                     self.rows.append([False])
+            self.body = self.body[self.lutPaddingLength:]
         except Exception as exc: raise Exception("load->lut: " + str(exc))
-        except: raise Exception("load->lut: error when parsing") 
+        except: raise Exception("load->lut: error when parsing")
+
+# ----- PARSED LUT -----
+# isFull (bool)
+# pointer (int)
+#
+# verifyBodyLength
+# ----------------------
+
+    def parse_data(self): # Parse data from file
+        try:
+            if not len(self.body) == self.verifyBodyLength: raise Exception("body length error")
+            data = self.body
+            self.data = []
+            i = 0
+            current_row = []
+            for column in self.columns:
+                current_row.append(pdb_datatypes.decode(data[:column[3]], 0))
+                data = data[column[3]:]
+            self.data.append(current_row)
+            current_row = []
+            for row in self.rows:
+                if i >= self.totalColumns:
+                    i = 0
+                    self.data.append(current_row)
+                    current_row = []
+                if row[0]:
+                    current_row.append([True, pdb_datatypes.decode(data[:row[1]], self.columns[i][2])])
+                    data = data[row[1]:]
+                else:
+                    current_row.append([False])
+                i += 1
+            self.data.append(current_row)
+        except Exception as exc: raise Exception("load->data: " + str(exc))
+        except: raise Exception("load->data: error when parsing")
+
+# ----- PARSED DATA -----
+# Main row looks like this: [item1, item2, item3]
+# Main row contains names of columns.
+# Other rows look like this: [[True, item], [False], [True, item]]
+# -----------------------
