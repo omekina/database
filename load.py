@@ -15,7 +15,9 @@ class session: # Database session
             file = open(self.path, "rb")
             read = file.read()
             file.close()
-            self.head, self.body = read[:10], read[10:]
+            read_bits = pdb_bitlogic.octets_to_bits(read)
+            if len(read_bits) < 80: raise Exception("load: length error")
+            self.head, self.body = read_bits[:80], read_bits[80:]
         except: raise Exception("load: error when loading file")
     
 # ----- PARSED FILE -----
@@ -25,14 +27,14 @@ class session: # Database session
 
     def parse_head(self): # Parse head from file data
         try:
-            head = pdb_bitlogic.octets_to_bits(self.head)
+            head = self.head
             if not len(head) == 80: raise Exception("length error")
             version, head = int(head[:12], base=2), head[12:]
             if not version == program_data.version_id: raise Exception("versions do not match")
             self.flags, head = head[:16], head[16:]
             self.layoutLength, head = int(head[:12], base=2), head[12:]
             self.lutLength, head = int(head[:36], base=2), head[36:]
-            self.lutPaddingLength = int(head, base=2) 
+            self.lutPaddingLength = int(head, base=2)
         except Exception as exc: raise Exception("load->head: " + str(exc))
         except: raise Exception("load->head: error when parsing")
 
