@@ -13,5 +13,5 @@ def bits_to_octets(bits): # Encode bits to octets (bytes)
     if not (len(bits)/8).is_integer(): raise Exception("pdb_bitlogic: input is not in valid octet length")
     try:
         for i in range(0, len(bits), 8):
-            octets += int(bits[i:i+8], base=2).encode("utf-8")
+            octets += int(bits[i:i+8], base=2).to_bytes(1, byteorder="little")
     except: raise Exception("pdb_bitlogic: error when encoding bits")
