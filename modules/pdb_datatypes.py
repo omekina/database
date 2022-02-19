@@ -19,3 +19,14 @@ def decode(raw_data, datatype):
         return decoded
     except Exception as exc: raise Exception("datatype_decode: " + str(exc))
     except: raise Exception("datatype_decode: error when decoding data")
+
+def encode(raw_data, datatype):
+    try:
+        if datatype == 0: # String
+            bytes_data = dt0.encode(raw_data)
+            encoded = pdb_bitlogic.octets_to_bits(bytes_data)
+        else: raise Exception("datatype not supported") # Datatype not supported
+        return encoded
+    except Exception as exc: raise Exception("datatype_encode: " + str(exc))
+    except: raise Exception("datatype_encode: error when encoding data")
+

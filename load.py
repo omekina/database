@@ -4,6 +4,7 @@ from modules import pdb_datatypes
 
 
 class session: # Database session
+    __slots__ = "path", "head", "body", "flags", "layoutLength", "lutLength", "lutPaddingLength", "lutActualLength", "totalColumns", "columns", "verifyBodyLength", "rows", "columnNames", "data"
     def __init__(self, path_to_file):
         if not path_to_file[-4:] == ".pdb":
             raise Exception("load: wrong filetype")
@@ -114,7 +115,7 @@ class session: # Database session
             for column in self.columns:
                 current_row.append(pdb_datatypes.decode(data[:column[3]], 0))
                 data = data[column[3]:]
-            self.data.append(current_row)
+            self.columnNames = current_row
             current_row = []
             for row in self.rows:
                 if i >= self.totalColumns:
@@ -136,3 +137,8 @@ class session: # Database session
 # Main row contains names of columns.
 # Other rows look like this: [[True, item], [False], [True, item]]
 # -----------------------
+
+    def get(self):
+        # flags, columns[[isKey, isAutoIncrement, dataType], ...], columnNames[name1, name2, ...], data[[True, value], [False]]
+        return self.flags, self.columns, self.columnNames, self.data
+
