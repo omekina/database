@@ -2,7 +2,7 @@ from modules import pdb_datatypes
 
 
 class session:
-    __slots__ = "flags", "columns", "columnNames", "data", "rows", "bitData", "bitLut", "bitLayout", "bitHead"
+    __slots__ = "flags", "columns", "columnNames", "data", "rows", "bitData", "bitLut", "paddingLength", "bitLayout", "bitHead"
     def __init__(self, flags, columns, columnNames, data):
         self.flags = flags
         self.columns = columns
@@ -46,8 +46,16 @@ class session:
                     lut += "0"
             if not (len(lut)/8).is_integer():
                 remainder = len(lut) % 8
+                self.paddingLength = remainder
                 lut += "".join(["0" for i in range(remainder)])
             self.bitLut = lut
         except Exception as exc: raise Exception("save->lut: " + str(exc))
         except: raise Exception("save->lut: error when constructing")
+
+
+    def construct_layout(self): # Construct layout bit stream
+        try:
+            layout = ""
+        except Exception as exc: raise Exception("save->layout: " + str(exc))
+        except: raise Exception("save->layout: error when constructing")
 
