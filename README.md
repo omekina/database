@@ -1,4 +1,4 @@
-# Plory's database
+# Ondra's database
 
 Trying to create something like SQL just for fun. :) I'm trying to optimize everything from the start, so new updates might not come right away.<br />
 This is still just a development version and should not be used in production!
